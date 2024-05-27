@@ -48,19 +48,13 @@ def teilaufgabe_b(X, y):
     classes, class_counts = np.unique(y, return_counts=True)
     priors = class_counts / class_counts.sum()
 
-
-
-    n_classes = len(classes)
-    n_features = X.shape[1]
-
-    
-    
-    # Berechnung der bedingten Wahrscheinlichkeiten
-    conds = np.zeros((n_classes, n_features))
+    # class x words
+    number_of_words = X.shape[1]
+    conds = np.zeros((len(classes), number_of_words))
     
     for i, c in enumerate(classes):
         X_c = X[y == c]
-        conds[i, :] = (X_c.sum(axis=0) + 1) / (X_c.sum() + n_features)  # Additive Glättung
+        conds[i, :] = (X_c.sum(axis=0) + 1) / (X_c.sum() + number_of_words)  # Additive Glättung
     
     return priors, conds
 
