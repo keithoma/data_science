@@ -1,7 +1,13 @@
 # -------------------------------
-# Abgabegruppe:
+# Abgabegruppe: Gruppe 2
 # Personen:
+# Lushaj, Ardit (617482)
+# Steflyuk, Marina (572453)
+# Thoma, Kei (574613)
 # HU-Accountname:
+# lushajar
+# steflyum
+# thomakei
 # -------------------------------
 import numpy as np
 import pandas as pd
@@ -45,42 +51,19 @@ def teilaufgabe_b(X, y):
     """
     # a priori probability is simply "absolute frequency / total frequency"
     # in the given example, the classes are "not metal (=0)" and "(metal = 1)"
-    classes, class_counts = np.unique(y, return_counts=True)
-    priors = class_counts / class_counts.sum()
+    classes, number_classes = np.unique(y, return_counts=True)
+    priors = number_classes / number_classes.sum()
 
     # class x words
     number_of_words = X.shape[1]
     conds = np.zeros((len(classes), number_of_words))
     
-    for i, c in enumerate(classes):
-        X_c = X[y == c]
-        conds[i, :] = (X_c.sum(axis=0) + 1) / (X_c.sum() + number_of_words)  # Additive Glättung
+    for i, instance in zip(range(len(classes)), classes):
+        X_filtered = X[y == instance] # X_class are the rows that are metal
+        # save to the i-th row
+        conds[i, :] = (X_filtered.sum(axis=0) + 1) / (X_filtered.sum() + number_of_words) 
     
     return priors, conds
-
-
-# Laden des Datensatzes
-df_train = pd.read_csv("song_lyrics/train.csv")
-df_test = pd.read_csv("song_lyrics/test.csv")
-
-# Erstellen einer neuen Spalte mit einem binären Klassifikationslabel
-df_train["Label"] = (df_train["Genre"] == "Metal").astype(int)
-df_test["Label"] = (df_test["Genre"] == "Metal").astype(int)
-
-# Definition der Klassifikationsziels
-y_test = df_test["Label"].values
-y_train = df_train["Label"].values
-print("\nmain y_train = {}".format(df_train["Label"]))
-print("\nmain y_train = {}".format(y_train))
-classes = np.unique(y_train)
-
-# Erstellen eines Bag of Word Modells und Transformation von Training und Testdatensatz
-vectorizer, X_train, X_test = teilaufgabe_a(
-    df_train["Lyrics"].values, df_test["Lyrics"].values
-)
-
-# Trainieren eines Naive Bayes Klassifikators
-priors, conds = teilaufgabe_b(X_train, y_train)
 
 
 def teilaufgabe_c(X, classes, priors, conds):
@@ -92,18 +75,19 @@ def teilaufgabe_c(X, classes, priors, conds):
        prediction_log_probs: Ein 2D numpy array mit den berechneten Klassenzugehörigkeiten in natürlicher logarithmischer Skala.
                                 shape: (Zeilen im Datensatz x mögliche Klassen)
     """
-
-    # Implementieren Sie hier Ihre Lösung
-    # Berechnung der log-Wahrscheinlichkeiten für priors und conds
+    # some computations
     log_priors = np.log(priors)
     log_conds = np.log(conds)
+    prediction_log_probs = np.matmul(X, np.transpose(log_conds)) + log_priors
 
-    # Berechnung der log-Wahrscheinlichkeiten für jedes Dokument und jede Klasse
-    prediction_log_probs = X @ log_conds.T + log_priors
-
-    # Vorhersage der Klasse mit der höchsten log-Wahrscheinlichkeit
-    prediction = np.argmax(prediction_log_probs, axis=1)
+    prediction = []
+    for row in prediction_log_probs:
+        if row[0] > row[1]:
+            prediction.append(0)
+        else:
+            prediction.append(1)
     
+    # where were we supposed to use the argument classes?
     return prediction, prediction_log_probs
 
 
