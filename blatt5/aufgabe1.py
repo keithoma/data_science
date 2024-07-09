@@ -3,16 +3,16 @@ from scipy.stats import t, mannwhitneyu
 
 
 # -------------------------------
-# Abgabegruppe:
-# Personen:
-# HU-Accountname:
+# Abgabegruppe: G2
+# Personen: Kei Thoma, Marina Steflyuk, Ardit Lushaj
+# HU-Accountname: 574613, 572453, 617482
 # -------------------------------
 
 
 def teilaufgabe_a():
     return """
-    H_0: Die neue Version ist nicht langsamer als die alte Version.\n
-    H_A: Die neue Version ist langsamer als die alte Version.
+    H_0: Die neue Version ist im Durchschnitt nicht langsamer als die alte Version.\n
+    H_A: Die neue Version ist im Durchschnitt langsamer als die alte Version.
     """
 
 
@@ -53,13 +53,8 @@ def teilaufgabe_c(samples_a, samples_b):
     Kann die Nullhypothese zugunsten der Alternativhypothese verworfen werden?
     Geben Sie den p-value und das Testergebnis (boolean) zurück.
     """
-
-    # Mann-Whitney U-Test
     p_value = mannwhitneyu(samples_a, samples_b, alternative='greater')
-    
-    # Entscheidung basierend auf dem p-Wert
     decision = p_value < 0.05
-
     """
     Argumente: Formulieren Sie hier ihre Antwort. 
     """
