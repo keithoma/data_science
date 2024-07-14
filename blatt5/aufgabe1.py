@@ -1,20 +1,17 @@
 import numpy as np
 from scipy.stats import t, mannwhitneyu
 
-
 # -------------------------------
 # Abgabegruppe: G2
 # Personen: Kei Thoma, Marina Steflyuk, Ardit Lushaj
 # HU-Accountname: 574613, 572453, 617482
 # -------------------------------
 
-
 def teilaufgabe_a():
     return """
     H_0: Die neue Version ist im Durchschnitt nicht langsamer als die alte Version.\n
     H_A: Die neue Version ist im Durchschnitt langsamer als die alte Version.
     """
-
 
 def teilaufgabe_b(samples_a, samples_b):
     """
@@ -46,7 +43,6 @@ def teilaufgabe_b(samples_a, samples_b):
 
     return mean_diff, p_value, decision
 
-
 def teilaufgabe_c(samples_a, samples_b):
     """
     Führen Sie den Mann-Whitney U Test für die beiden Stichproben mit einem Signifikanzniveau von 5% durch.
@@ -59,7 +55,6 @@ def teilaufgabe_c(samples_a, samples_b):
     Argumente: Formulieren Sie hier ihre Antwort. 
     """
     return p_value, decision
-
 
 if __name__ == "__main__":
     samples_a = np.array([0.24, 0.22, 0.20, 0.25], dtype=np.float64)
